@@ -16,15 +16,31 @@ Perbedaannya adalah stateless widget tidak memiliki "state" yang dapat berubah d
 
 ### Sebutkan widget apa saja yang kamu gunakan pada proyek ini dan jelaskan fungsinya.
 
-
+- __MaterialApp__: Widget utama yang _contain_ seluruh aplikasi dan mengatur tema serta navigasi.
+- __ThemeData__: Menentukan tema visual aplikasi, seperti skema warna.
+- __ColorScheme__: Mengatur skema warna yang digunakan dalam tema.
+- __Scaffold__: Menyediakan struktur dasar halaman dengan AppBar dan body.
+- __AppBar__: Menampilkan navbar aplikasi di bagian atas dengan judul.
+- __Text__: Menampilkan teks pada layar.
+- __Padding__: Memberikan ruang di sekitar widget.
+- __Column__: Menyusun widget secara vertikal.
+- __Row__: Menyusun widget secara horizontal.
+- __Card__: Menampilkan kotak dengan sudut melengkung dan bayangan.
+- __GridView.count__: Menampilkan widget dalam bentuk grid dengan jumlah kolom tertentu.
+- __Icon__: Menampilkan _icon_ grafis.
+- __InkWell__: Menangani interaksi menekan pada widget dan memberikan efek visual.
+- __SnackBar__: Menampilkan pesan sementara di bagian bawah layar.
+- __Material__: Menyediakan efek _material design_ seperti _ripple effect_ saat berinteraksi.
 
 ### Apa fungsi dari `setState()`? Jelaskan variabel apa saja yang dapat terdampak dengan fungsi tersebut.
 
+Fungsi dari `setState()` adalah untuk memberitahu framework Flutter bahwa ada perubahan pada state internal suatu stateful widget, sehingga perlu dilakukan penggambaran ulang (_rebuild_) pada widget tersebut dan turunannya. Variabel yang terdampak oleh `setState()` adalah variabel yang dideklarasikan dalam _class_ `State` dan digunakan dalam metode `build()`.
 
+###  Jelaskan perbedaan antara `const` dengan `final`.
 
-###  Jelaskan perbedaan antara const dengan final.
+`const`: Nilai variabel bersifat konstan dan harus diinisialisasi pada saat kompilasi (compile-time constant). Digunakan untuk nilai yang benar-benar tetap dan tidak akan pernah berubah sepanjang masa eksekusi program.
 
-
+`final`: Nilai variabel hanya dapat ditetapkan sekali dan bisa diinisialisasi pada saat runtime. Digunakan untuk nilai yang tidak akan berubah setelah diinisialisasi, tetapi nilainya mungkin tidak diketahui pada saat kompilasi.
 
 ### Langkah Implementasi Checklist
 
