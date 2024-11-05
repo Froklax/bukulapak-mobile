@@ -44,3 +44,143 @@ Fungsi dari `setState()` adalah untuk memberitahu framework Flutter bahwa ada pe
 
 ### Langkah Implementasi Checklist
 
+1. **Membuat program Flutter baru.**
+- Pertama, saya membuat program flutter baru bernama `bukulapak_mobile` dengan menjalankan perintah `flutter create bukulapak_mobile`. Perintah ini akan membuat proyek Flutter baru yang berisi struktur dasar aplikasi, termasuk folder `lib`, `android`, `ios`, dan file konfigurasi lainnya.
+
+2. **Membuat tiga tombol sederhana dengan ikon dan teks.**
+- Kemudian, Saya membuat file baru bernama `menu.dart` di dalam folder `lib` untuk menjaga kerapihan kode.
+- Di dalam `menu.dart`, saya mendefinisikan _class_ `ItemHomepage` untuk merepresentasikan item pada halaman utama:
+
+```DART
+class ItemHomepage {
+    final String name;
+    final IconData icon;
+    final Color color;
+
+    ItemHomepage(this.name, this.icon, this.color);
+}
+```
+
+- Kelas ini memiliki properti name, icon, dan color untuk menyimpan informasi tentang setiap tombol.
+
+- Saya juga membuat _class_ `ItemCard` yang merupakan `StatelessWidget` untuk menampilkan kartu dengan ikon dan nama:
+
+```DART
+class ItemCard extends StatelessWidget {
+  final ItemHomepage item;
+
+  const ItemCard(this.item, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: item.color,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}")),
+            );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  item.icon,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  item.name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+- Kemudian, dalam `menu.dart`, saya membuat kelas `MyHomePage` yang merupakan `StatelessWidget` dan berfungsi sebagai halaman utama. Di dalamnya, saya mendefinisikan list items yang berisi tiga _instance_ `ItemHomepage` dengan ketentuan:
+
+```DART
+final List<ItemHomepage> items = [
+  ItemHomepage("Lihat Daftar Produk", Icons.menu, Colors.blue),
+  ItemHomepage("Tambah Produk", Icons.add, Colors.orange),
+  ItemHomepage("Logout", Icons.logout, Colors.red),
+];
+```
+- Setiap item merepresentasikan tombol yang akan ditampilkan dengan icon dan warna yang berbeda.
+
+3. **Mengimplementasikan warna-warna yang berbeda untuk setiap tombol.**
+
+- Pertama untuk dapat mengatur warna berbeda pada setiap tombol, saya menambahkan atribut color pada kelas ItemHomepage. 
+
+```DART
+class ItemHomepage {
+    final String name;
+    final IconData icon;
+    final Color color;
+
+    ItemHomepage(this.name, this.icon, this.color);
+}
+```
+- Atribut color berfungsi untuk menyimpan informasi warna yang akan digunakan oleh setiap instance ItemHomepage.
+
+- Selanjutnya, saya mendefinisikan list items dan menetapkan warna yang berbeda untuk setiap item:
+
+```DART
+final List<ItemHomepage> items = [
+  ItemHomepage("Lihat Daftar Produk", Icons.menu, Colors.blue),
+  ItemHomepage("Tambah Produk", Icons.add, Colors.orange),
+  ItemHomepage("Logout", Icons.logout, Colors.red),
+];
+```
+
+- Warna-warna tersebut ditentukan menggunakan konstanta warna yang tersedia di Flutter, seperti `Colors.blue`, `Colors.orange`, dan `Colors.red`.
+
+- Terakhir, saya menggunakan atribut color dalam widget `ItemCard`. Dalam kelas `ItemCard`, saya menggunakan `item.color` untuk menentukan warna tombol:
+
+```DART
+Material(
+  // Menentukan warna latar belakang dari tombol.
+  color: item.color,
+  borderRadius: BorderRadius.circular(12),
+  child: InkWell(
+    // ...
+  ),
+);
+```
+
+4. **Memunculkan Snackbar dengan tulisan tertentu saat tombol ditekan.**
+
+- Di dalam class `ItemCard`, saya membungkus konten card dengan widget `InkWell` dan menambahkan fungsi `onTap`:
+
+```DART
+InkWell(
+  onTap: () {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(content: Text("Kamu telah menekan tombol ${item.name}"))
+      );
+  },
+  child: ...
+)    
+```
+
+- Ketika tombol ditekan, `SnackBar` akan muncul di bagian bawah layar dengan pesan yang sesuai dengan nama tombol yang ditekan.
+
+5. **Mengubah README.md.**
+- Terakhir, saya mengubah `README.md` yang sebelumnya telah saya buat untuk menambahkan jawaban dari pertanyaan-pertanyaan yang diberikan pada Tugas 7.
+
