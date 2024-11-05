@@ -61,7 +61,7 @@ class ItemHomepage {
 }
 ```
 
-- Kelas ini memiliki properti name, icon, dan color untuk menyimpan informasi tentang setiap tombol.
+- _class_ ini memiliki properti name, icon, dan color untuk menyimpan informasi tentang setiap tombol.
 
 - Saya juga membuat _class_ `ItemCard` yang merupakan `StatelessWidget` untuk menampilkan kartu dengan ikon dan nama:
 
@@ -111,7 +111,7 @@ class ItemCard extends StatelessWidget {
 }
 ```
 
-- Kemudian, dalam `menu.dart`, saya membuat kelas `MyHomePage` yang merupakan `StatelessWidget` dan berfungsi sebagai halaman utama. Di dalamnya, saya mendefinisikan list items yang berisi tiga _instance_ `ItemHomepage` dengan ketentuan:
+- Kemudian, dalam `menu.dart`, saya membuat _class_ `MyHomePage` yang merupakan `StatelessWidget` dan berfungsi sebagai halaman utama. Di dalamnya, saya mendefinisikan list items yang berisi tiga _instance_ `ItemHomepage` dengan ketentuan:
 
 ```DART
 final List<ItemHomepage> items = [
@@ -124,7 +124,7 @@ final List<ItemHomepage> items = [
 
 3. **Mengimplementasikan warna-warna yang berbeda untuk setiap tombol.**
 
-- Pertama untuk dapat mengatur warna berbeda pada setiap tombol, saya menambahkan atribut color pada kelas ItemHomepage. 
+- Pertama untuk dapat mengatur warna berbeda pada setiap tombol, saya menambahkan atribut color pada _class_ ItemHomepage. 
 
 ```DART
 class ItemHomepage {
@@ -149,7 +149,7 @@ final List<ItemHomepage> items = [
 
 - Warna-warna tersebut ditentukan menggunakan konstanta warna yang tersedia di Flutter, seperti `Colors.blue`, `Colors.orange`, dan `Colors.red`.
 
-- Terakhir, saya menggunakan atribut color dalam widget `ItemCard`. Dalam kelas `ItemCard`, saya menggunakan `item.color` untuk menentukan warna tombol:
+- Terakhir, saya menggunakan atribut color dalam widget `ItemCard`. Dalam _class_ `ItemCard`, saya menggunakan `item.color` untuk menentukan warna tombol:
 
 ```DART
 Material(
