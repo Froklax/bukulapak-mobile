@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:bukulapak_mobile/widgets/left_drawer.dart';
+import 'package:bukulapak_mobile/widgets/book_card.dart';
 
 class MyHomePage extends StatelessWidget {
   final String npm = '2306152121';
@@ -28,7 +30,9 @@ class MyHomePage extends StatelessWidget {
         ),
         // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
         backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
+      drawer: const LeftDrawer(),
       // Body halaman dengan padding di sekelilingnya.
       body: Padding(
         padding: const EdgeInsets.all(16.0),
