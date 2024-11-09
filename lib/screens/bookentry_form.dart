@@ -20,7 +20,7 @@ class _BookEntryFormPageState extends State<BookEntryFormPage> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Add Book Form',
+            'Form Tambah Buku Baru',
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -50,7 +50,7 @@ class _BookEntryFormPageState extends State<BookEntryFormPage> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Name of book cannot be empty!";
+                        return "Nama buku tidak boleh kosong!";
                       }
                       return null;
                     },
@@ -73,14 +73,14 @@ class _BookEntryFormPageState extends State<BookEntryFormPage> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Price cannot be empty!";
+                        return "Price tidak boleh kosong!";
                       }
                       final parsedValue = int.tryParse(value);
                       if (parsedValue == null) {
-                        return "Price needs to be a digit!";
+                        return "Price harus berupa angka!";
                       }
                       if (parsedValue < 0 ) {
-                        return "Price needs to be a positive number!";
+                        return "Price tidak boleh negatif!";
                       }
                       return null;
                     },
@@ -103,7 +103,7 @@ class _BookEntryFormPageState extends State<BookEntryFormPage> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Description cannot be empty!";
+                        return "Description tidak boleh kosong!";
                       }
                       return null;
                     },
@@ -126,11 +126,11 @@ class _BookEntryFormPageState extends State<BookEntryFormPage> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Stock cannot be empty!";
+                        return "Stock tidak boleh kosong!";
                       }
                       final parsedValue = int.tryParse(value);
                       if (parsedValue == null) {
-                        return "Stock needs to be a digit!";
+                        return "Stock harus berupa angka!";
                       }
                       if (parsedValue < 1 ) {
                         return "Stock minimum 1!";
@@ -154,7 +154,7 @@ class _BookEntryFormPageState extends State<BookEntryFormPage> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text('Book is added successfully!'),
+                                title: const Text('Buku berhasil ditambahkan!'),
                                 content: SingleChildScrollView(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
