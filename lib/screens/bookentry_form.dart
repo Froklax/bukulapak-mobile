@@ -20,7 +20,7 @@ class _BookEntryFormPageState extends State<BookEntryFormPage> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Form Tambah Buku Baru',
+            'Add Book Form',
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
