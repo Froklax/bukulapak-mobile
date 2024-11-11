@@ -9,14 +9,130 @@ Number 1 mobile bookstore in Pacil!!!
 
 ### Apa kegunaan const di Flutter? Jelaskan apa keuntungan ketika menggunakan const pada kode Flutter. Kapan sebaiknya kita menggunakan const, dan kapan sebaiknya tidak digunakan?
 
+`const` digunakan untuk mendefinisikan nilai dan widget yang bersifat _constant_ pada waktu kompilasi. `const` hanya dibuat sekali dan dapat di-_share_, sehingga mengurangi penggunaan memori dan meningkatkan performa aplikasi. `const` juga menjamin bahwa nilai atau widget tidak akan berubah selama _runtime_, sehingga mengurangi kemungkinan ada bug dan menghindari rebuild pada widget karena sudah diketahui tidak berubah.
+
 ### Jelaskan dan bandingkan penggunaan Column dan Row pada Flutter. Berikan contoh implementasi dari masing-masing layout widget ini!
+
+`Column` dan `Row` adalah widget layout yang digunakan untuk menyusun _child_ dari widget.
+
+- `Column`: Menyusun widget secara vertikal (dari atas ke bawah).
+
+```DART
+Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    Text('Item Pertama'),
+    Text('Item Kedua'),
+    Text('Item Ketiga'),
+  ],
+)
+```
+
+- `Row`: Menyusun widget secara horizontal (dari kiri ke kanan). 
+
+```DART
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    InfoCard(title: 'NPM', content: npm),
+    InfoCard(title: 'Name', content: name),
+    InfoCard(title: 'Class', content: className),
+  ],
+),
+```
+
+Perbedaannya adalah arah penyusunan child widget. Column secara vertikal, sedangkan Row secara horizontal.
 
 ### Sebutkan apa saja elemen input yang kamu gunakan pada halaman form yang kamu buat pada tugas kali ini. Apakah terdapat elemen input Flutter lain yang tidak kamu gunakan pada tugas ini? Jelaskan!
 
+Pada halaman form yang saya dibuat, elemen input yang digunakan adalah:
+
+- `TextFormField`: Digunakan untuk input _name_, _price_, _description_, dan _stock_.
+- `ElevatedButton`: Digunakan sebagai tombol untuk menyimpan data yang telah diinput.
+
+Elemen Flutter lain yang saya tidak digunakan pada tugas kali ini:
+
+- `Checkbox`: Untuk input pilihan iya atau tidak.
+- `Radio`: Untuk memilih satu opsi dari beberapa pilihan.
+- `Switch`: Untuk toggle keadaan aktif/non-aktif.
+- `Slider`: Untuk memilih nilai dalam _range_ tertentu.
+- `DropdownButtonFormField`: Untuk menampilkan daftar pilihan dalam bentuk _dropdown_.
+- `DatePicker`: Untuk memilih tanggal.
+- `TimePicker`: Untuk memilih waktu.
+- `File Picker`: Untuk mengunggah file atau gamba
+
 ### Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah kamu mengimplementasikan tema pada aplikasi yang kamu buat?
+
+Saya mengatur tema dengan menggunakan `ThemeData` pada `MaterialApp` di `main.dart`.
+
+```DART
+theme: ThemeData(
+  colorScheme: ColorScheme.fromSwatch(
+    primarySwatch: Colors.deepPurple,
+  ).copyWith(secondary: Colors.deepPurple[400]),
+  useMaterial3: true,
+),
+```
+
+Dengan menetapkan `colorScheme`, semua widget yang menggunakan warna tema akan secara otomatis mengikuti skema warna yang ditentukan yang membuat konsistensi tampilan aplikasi terjaga. Saya mengimplementasikan tema pada aplikasi yang dibuat dengan mendefinisikan `ThemeData` dan menerapkannya ke `MaterialApp`.
 
 ### Bagaimana cara kamu menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
 
+Untuk menangani navigasi dalam aplikasi Flutter dengan banyak halaman, saya menggunakan class `Navigator` dengan _method_ `push`, `pop`, dan `pushReplacement`.
+
+`Navigator.push` digunakan untuk menambahkan route (halaman) baru ke atas stack navigasi, sehingga membuka halaman baru tanpa menutup halaman sebelumnya.
+
+Contoh dari file 'left_drawer.dart':
+
+Ketika pengguna memilih menu "Tambah Produk" pada drawer, aplikasi akan menavigasi ke halaman form tambah buku dengan menggunakan `Navigator.push`:
+```DART
+ListTile(
+  leading: const Icon(Icons.add),
+  title: const Text('Tambah Produk'),
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const BookEntryFormPage()),
+    );
+  },
+),
+```
+Di sini, saat `ListTile` ditekan, `Navigator.push` akan menambahkan route baru ke stack dan menampilkan `BookEntryFormPage`.
+
+`Navigator.pop` digunakan untuk menghapus route teratas dari stack navigasi, sehingga kembali ke halaman sebelumnya.
+
+Contoh dari file `bookentry_form.dart`:
+
+Setelah pengguna menekan tombol "OK" pada pop-up berisi data yang diinput form, aplikasi akan kembali ke halaman sebelumnya menggunakan `Navigator.pop`:
+
+```DART
+TextButton(
+  child: const Text('OK'),
+  onPressed: () {
+    Navigator.pop(context); // Menutup pop-up
+    Navigator.pop(context); // Kembali ke halaman sebelumnya
+  },
+),
+```
+Pemanggilan `Navigator.pop(context)` pertama menutup pop-up, dan pemanggilan kedua kembali ke halaman sebelumnya.
+
+`Navigator.pushReplacement` menggantikan route saat ini dengan route baru tanpa menambah ukuran stack navigasi. Halaman sebelumnya akan digantikan oleh halaman baru.
+
+Misalkan pada aplikasi terdapat fitur logout yang ingin langsung menavigasi pengguna ke halaman login dan tidak memungkinkan kembali ke halaman sebelumnya:
+
+```DART
+ListTile(
+  leading: const Icon(Icons.logout),
+  title: const Text('Logout'),
+  onTap: () {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  },
+),
+```
+Dengan menggunakan `Navigator.pushReplacement`, halaman saat ini digantikan oleh `LoginPage` dan halaman sebelumnya dihapus dari stack navigasi. Ini berarti pengguna tidak dapat kembali ke halaman sebelumnya menggunakan tombol back.
 
 ## Tugas 7
 
