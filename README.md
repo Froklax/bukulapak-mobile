@@ -257,34 +257,6 @@ class _RegisterPageState extends State<RegisterPage> {
 }
 ```
 
-- Saya menggunakan `Provider`untuk `CookieRequest`. Pada `main.dart`, saya contain seluruh aplikasi dengan `Provider` untuk membagikan instance `CookieRequest` ke seluruh widget.
-
-```DART
-void main() {
-  runApp(
-    Provider(
-      create: (_) => CookieRequest(),
-      child: const MyApp(),
-    ),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bukulapak Mobile',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const RegisterPage(),
-    );
-  }
-}
-```
-
 - Kemudian, pada file `register.dart`, digunakan package `pbp_django_auth` untuk melakukan request ke server django dan mengirim data registrasi ke endpoint Django `/auth/register/`.
 
 ```DART
@@ -299,8 +271,6 @@ ElevatedButton(
     String password2 = _confirmPasswordController.text;
 
     // Cek kredensial
-    // Untuk menyambungkan Android emulator dengan Django pada localhost,
-    // gunakan URL http://10.0.2.2/
     final response = await request.postJson(
         "http://127.0.0.1:8000/auth/register/",
         jsonEncode({
@@ -444,8 +414,6 @@ class _LoginPageState extends State<LoginPage> {
                       String password = _passwordController.text;
 
                       // Cek kredensial
-                      // Untuk menyambungkan Android emulator dengan Django pada localhost,
-                      // gunakan URL http://10.0.2.2/
                       final response = await request
                           .login("http://127.0.0.1:8000/auth/login/", {
                         'username': username,
@@ -527,13 +495,301 @@ class _LoginPageState extends State<LoginPage> {
 
 3. **Mengintegrasikan sistem autentikasi Django dengan proyek tugas Flutter.**
 
+- Saya menggunakan `Provider`untuk `CookieRequest`. Pada `main.dart`, saya contain seluruh aplikasi dengan `Provider` untuk membagikan instance `CookieRequest` ke seluruh widget.
+
+```DART
+void main() {
+  runApp(
+    Provider(
+      create: (_) => CookieRequest(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Bukulapak Mobile',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const RegisterPage(),
+    );
+  }
+}
+```
+
+- Dengan menggunakan `Provider` dan `CookieRequest` dari package `pbp_django_auth`, aplikasi Flutter dapat mengelola sesi autentikasi dan cookie yang diperlukan untuk berkomunikasi dengan backend Django.
+
+- `CookieRequest` memungkinkan aplikasi Flutter untuk mempertahankan session dan melakukan autentikasi pada setiap permintaan `HTTP`.
+
 4. **Membuat model kustom sesuai dengan proyek aplikasi Django.**
+
+- Saya membuat file baru bernama `book_entry.dart` pada folder `models` yang di dalamnya terdapat model Dart yang sesuai dengan model di Django. Saya mendapatkan ini dengan menggunakan aplikasi `QuickType` untuk mendapatkan model ini dari data JSON.
+
+```DART
+// To parse this JSON data, do
+//
+//     final product = productFromJson(jsonString);
+
+import 'dart:convert';
+
+List<Product> productFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+String productToJson(List<Product> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Product {
+    String model;
+    String pk;
+    Fields fields;
+
+    Product({
+        required this.model,
+        required this.pk,
+        required this.fields,
+    });
+
+    factory Product.fromJson(Map<String, dynamic> json) => Product(
+        model: json["model"],
+        pk: json["pk"],
+        fields: Fields.fromJson(json["fields"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "model": model,
+        "pk": pk,
+        "fields": fields.toJson(),
+    };
+}
+
+class Fields {
+    int user;
+    String name;
+    dynamic price;
+    String description;
+    int quantity;
+
+    Fields({
+        required this.user,
+        required this.name,
+        required this.price,
+        required this.description,
+        required this.quantity,
+    });
+
+    factory Fields.fromJson(Map<String, dynamic> json) => Fields(
+        user: json["user"],
+        name: json["name"],
+        price: json["price"],
+        description: json["description"],
+        quantity: json["quantity"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "user": user,
+        "name": name,
+        "price": price,
+        "description": description,
+        "quantity": quantity,
+    };
+}
+```
 
 5. **Membuat halaman yang berisi daftar semua item yang terdapat pada endpoint `JSON` di Django yang telah kamu deploy.**
 
+- Saya membuat halaman yang menampilkan daftar item dari endpoint `JSON` pada file `list_bookentry.dart`. Halaman ini mengambil data produk dari endpoint `JSON` di Django dan menampilkannya dalam bentuk list.
+
+```DART
+import 'package:flutter/material.dart';
+import 'package:bukulapak_mobile/models/book_entry.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:bukulapak_mobile/widgets/left_drawer.dart';
+import 'package:provider/provider.dart';
+import 'package:bukulapak_mobile/screens/book_detail.dart'; // Pastikan path benar
+
+class BookEntryPage extends StatefulWidget {
+  const BookEntryPage({super.key});
+
+  @override
+  State<BookEntryPage> createState() => _BookEntryPageState();
+}
+
+class _BookEntryPageState extends State<BookEntryPage> {
+  Future<List<Product>> fetchBook(CookieRequest request) async {
+    final response = await request.get('http://127.0.0.1:8000/json/');
+
+    // Melakukan konversi data json menjadi object Product
+    List<Product> listBuku = [];
+    for (var d in response) {
+      if (d != null) {
+        listBuku.add(Product.fromJson(d));
+      }
+    }
+    return listBuku;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Book List'),
+      ),
+      drawer: const LeftDrawer(),
+      body: FutureBuilder(
+        future: fetchBook(request),
+        builder: (context, AsyncSnapshot<List<Product>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(
+                child: Text(
+                  'Belum ada data buku pada Bukulapak.',
+                  style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
+                ),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (_, index) => GestureDetector(
+                  onTap: () {
+                    // Navigate to the detail page when tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailPage(product: snapshot.data![index]),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(5.0),
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Colors.black, blurRadius: 2.0, offset: Offset(0, 1))
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          snapshot.data![index].fields.name,
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text('Price: ${snapshot.data![index].fields.price}'),
+                        const SizedBox(height: 10),
+                        Text('Description: ${snapshot.data![index].fields.description}'),
+                        const SizedBox(height: 10),
+                        Text('Quantity: ${snapshot.data![index].fields.quantity}'),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+          }
+        },
+      ),
+    );
+  }
+}
+```
+
+- File ini akan Menampilkan `name`, `price`, `description`, dan `quantity` dari setiap item dalam sebuah list.
+
 6. **Membuat halaman detail untuk setiap item yang terdapat pada halaman daftar Item.**
 
+- Saya juga membuat file `book_detail.dart` yang akan menampilkan detail dari setiap item yang terdapat pada halaman `list_bookentry.dart`. Halaman ini dapat diakses dengan menekan item mana saja pada halaman daftar item, yang di dalamnya akan menunjukkan atribut dari setiap item.
+
+```DART
+import 'package:flutter/material.dart';
+import 'package:bukulapak_mobile/models/book_entry.dart';
+
+class BookDetailPage extends StatelessWidget {
+  final Product product;
+
+  const BookDetailPage({Key? key, required this.product}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(product.fields.name),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(product.fields.name,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Text('Price: ${product.fields.price}'),
+            const SizedBox(height: 10),
+            Text('Description: ${product.fields.description}'),
+            const SizedBox(height: 10),
+            Text('Stock: ${product.fields.quantity}'),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Kembali'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+- Juga terdapat fitur untuk kembali ke halaman daftar item, dengan menekan button kembali. Ini akan melakukan `Navigator.pop(context)` yang akan membuat tampilan kembali ke halaman sebelumnya.
+
 7. **Melakukan filter pada halaman daftar item dengan hanya menampilkan item yang terasosiasi dengan pengguna yang login.**
+
+- Pada tugas Django sebelum-sebelumnya, sudah dibuah fungsi `show_json` yang memfilter buku dan hanya menampilkan buku yang terasosiasi dengan user yang login saja.
+
+```python
+def show_json(request):
+    data = Product.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+```
+
+```python
+path('json/', show_json, name='show_json'),
+```
+
+- Pada file `list_bookentry.dart`, dilakukan `HTTP` `GET` request ke endpoint Django yang berada di `http://127.0.0.1:8000/json/`. Ini merupakan path untuk fungsi `show_json` tadi, yang sudah memfilter item berdasarkan user yang login. Kemudian akan dilakukan looping melalui seluruh elemen di response, dan menggunakan `fromJson` yang akan mengubah data JSON menjadi object `Product` yang akan disimpan di `listBuku`.  
+
+```DART
+final response = await request.get('http://127.0.0.1:8000/json/');
+
+    // Melakukan konversi data json menjadi object Product
+    List<Product> listBuku = [];
+    for (var d in response) {
+      if (d != null) {
+        listBuku.add(Product.fromJson(d));
+      }
+    }
+    return listBuku;
+```
+
+- Dengan ini, user hanya akan melihat buku yang ditambahkan oleh diri sendiri dan tidak dapat melihat buku yang ditambahkan oleh orang lain.
 
 8. **Mengubah README.md.**
 
