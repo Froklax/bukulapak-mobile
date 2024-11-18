@@ -2,6 +2,7 @@
 Number 1 mobile bookstore in Pacil!!!
 
 ### Fast Links
+- [Tugas 9](#tugas-9)
 - [Tugas 8](#tugas-8)
 - [Tugas 7](#tugas-7)
 
@@ -9,13 +10,23 @@ Number 1 mobile bookstore in Pacil!!!
 
 ### Jelaskan mengapa kita perlu membuat model untuk melakukan pengambilan ataupun pengiriman data JSON? Apakah akan terjadi error jika kita tidak membuat model terlebih dahulu?
 
-### Jelaskan fungsi dari library http yang sudah kamu implementasikan pada tugas ini
+Membuat model dalam Flutter untuk data JSON penting karena model mempermudah proses parsing dan _serialization_ data antara format JSON dan object Dart. Dengan model, data dapat dikelola dengan lebih terstruktur dan aman. Jika tidak membuat model terlebih dahulu, aplikasi mungkin mengalami kesulitan dalam mengakses atau memanipulasi data yang dapat menyebabkan error runtime akibat pengolahan data yang tidak tepat.
+
+### Jelaskan fungsi dari library http yang sudah kamu implementasikan pada tugas ini.
+
+Library `http` digunakan untuk melakukan permintaan HTTP ke server dari aplikasi Flutter. Fungsi utamanya adalah untuk mengirim permintaan seperti `GET`, `POST`, `PUT`, dan `DELETE`, serta menerima respon dari server. Dalam tugas ini, library `http` memungkinkan aplikasi berkomunikasi dengan _backend_ project Django untuk mengambil atau mengirim data.
 
 ### Jelaskan fungsi dari CookieRequest dan jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.
 
-### Jelaskan mekanisme pengiriman data mulai dari input hingga dapat ditampilkan pada Flutter
+`CookieRequest` adalah class yang digunakan untuk mengelola permintaan HTTP yang memerlukan penyimpanan sesi menggunakan cookie. Fungsi utamanya adalah mempertahankan informasi session dan cookie antara request, yang penting untuk menjaga status _authentication_ user. Dengan membagikan instance CookieRequest ke semua komponen aplikasi Flutter, semua bagian aplikasi dapat mengakses informasi sesi yang konsisten, sehingga proses _authentication_ dan _authorization_ berjalan lancar.
+
+### Jelaskan mekanisme pengiriman data mulai dari input hingga dapat ditampilkan pada Flutter.
+
+Mekanisme pengiriman data dimulai ketika user memasukkan data pada aplikasi Flutter. Data tersebut kemudian di-_serialize_ dalam format JSON, dan dikirim ke server backend Django melalui request HTTP. Backend Django memproses request tersebut, melakukan operasi yang diperlukan seperti menyimpan ke database dan kemudian mengirim response kembali ke aplikasi Flutter. Aplikasi Flutter menerima response tersebut, melakukan parsing data JSON menjadi object Dart menggunakan model, dan kemudian menampilkan data tersebut pada interface user.
 
 ### Jelaskan mekanisme autentikasi dari login, register, hingga logout. Mulai dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.
+
+Pada mekanisme autentikasi, saat user melakukan registrasi, aplikasi Flutter mengumpulkan data akun user dan mengirimkannya ke backend Django melalui permintaan `POST`. Django menangani proses pembuatan akun baru dan mengirim response kembali ke Flutter. Untuk login, Flutter mengirim credential user ke Django, yang kemudian memverifikasi dan mengautentikasi user. Jika berhasil, Django membuat sesi dan mengirim session cookie ke Flutter, yang disimpan oleh `CookieRequest`. Saat logout, Flutter mengirim permintaan logout ke Django, yang akan mengakhiri session user. Dalam seluruh proses ini, Flutter menggunakan informasi session untuk menampilkan menu atau tampilan yang sesuai dengan status autentikasi user.
 
 ### Langkah Implementasi Checklist
 
