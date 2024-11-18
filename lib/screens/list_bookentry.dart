@@ -3,7 +3,7 @@ import 'package:bukulapak_mobile/models/book_entry.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:bukulapak_mobile/widgets/left_drawer.dart';
 import 'package:provider/provider.dart';
-import 'package:bukulapak_mobile/screens/book_detail.dart'; // Pastikan path benar
+import 'package:bukulapak_mobile/screens/book_detail.dart';
 
 class BookEntryPage extends StatefulWidget {
   const BookEntryPage({super.key});
@@ -52,7 +52,6 @@ class _BookEntryPageState extends State<BookEntryPage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (_, index) => GestureDetector(
                   onTap: () {
-                    // Navigate to the detail page when tapped
                     Navigator.push(
                       context,
                       MaterialPageRoute(
