@@ -87,7 +87,7 @@ class _BookEntryPageState extends State<BookEntryPage> {
                         const SizedBox(height: 10),
                         Text('Description: ${snapshot.data![index].fields.description}'),
                         const SizedBox(height: 10),
-                        Text('Quantity: ${snapshot.data![index].fields.quantity}'),
+                        Text('Stock: ${snapshot.data![index].fields.quantity}'),
                       ],
                     ),
                   ),

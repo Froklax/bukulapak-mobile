@@ -24,7 +24,7 @@ class BookDetailPage extends StatelessWidget {
             const SizedBox(height: 10),
             Text('Description: ${product.fields.description}'),
             const SizedBox(height: 10),
-            Text('Quantity: ${product.fields.quantity}'),
+            Text('Stock: ${product.fields.quantity}'),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
