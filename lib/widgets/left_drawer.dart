@@ -1,3 +1,4 @@
+import 'package:bukulapak_mobile/screens/list_bookentry.dart';
 import 'package:flutter/material.dart';
 import 'package:bukulapak_mobile/screens/menu.dart';
 import 'package:bukulapak_mobile/screens/bookentry_form.dart';
@@ -48,6 +49,17 @@ class LeftDrawer extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => MyHomePage(),
                     ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.add_reaction_rounded),
+              title: const Text('Daftar Buku'),
+              onTap: () {
+                  // Route menu ke halaman mood
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const BookEntryPage()),
+                  );
               },
             ),
             ListTile(
